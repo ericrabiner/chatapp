@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
-import { Button, Form, Segment } from "semantic-ui-react";
+import { Button, Form, Message } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
 
 function Settings() {
+  const history = useHistory();
   const { user, login } = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
@@ -27,6 +28,9 @@ function Settings() {
     onCompleted: () => {
       setErrors({});
       setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 2000);
     },
     variables: {
       username,
@@ -102,28 +106,26 @@ function Settings() {
           error={errors && errors.confirmNewPassword ? true : false}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
         />
+        <Button onClick={() => history.push("/home")}>Cancel</Button>
         <Button primary type="submit">
           Save
         </Button>
-        {success && (
-          <Segment id="success-message" inverted color="green">
-            User successfully updated.
-          </Segment>
-        )}
       </Form>
 
-      <Link id="link" to="/home">
-        Go back
-      </Link>
+      {success && (
+        <Message id="message" positive>
+          User successfully updated.
+        </Message>
+      )}
 
       {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
+        <Message id="message" negative>
           <ul className="list">
             {Object.values(errors).map((value) => (
               <li key={value}>{value}</li>
             ))}
           </ul>
-        </div>
+        </Message>
       )}
     </div>
   );

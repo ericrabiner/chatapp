@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, Message } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { Link, useHistory } from "react-router-dom";
@@ -90,13 +90,13 @@ function Register() {
       </Form>
 
       {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
+        <Message id="message" negative>
           <ul className="list">
             {Object.values(errors).map((value) => (
               <li key={value}>{value}</li>
             ))}
           </ul>
-        </div>
+        </Message>
       )}
     </div>
   );
