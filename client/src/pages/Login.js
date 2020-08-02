@@ -37,6 +37,10 @@ function Login() {
     <div id="light-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Login</h1>
+        <div>Don't have an account?</div>
+        <Link id="link" to="register">
+          Create one here
+        </Link>
         <Form.Input
           icon="at"
           iconPosition="left"
@@ -59,14 +63,10 @@ function Login() {
           error={errors && errors.password ? true : false}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button id="button" type="submit">
+        <Button type="submit" primary>
           Submit
         </Button>
       </Form>
-
-      <Link id="link" to="register">
-        New? Sign Up here
-      </Link>
 
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">

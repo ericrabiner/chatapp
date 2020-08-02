@@ -36,6 +36,10 @@ function Register() {
     <div id="light-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Register</h1>
+        <div>Already have an account?</div>
+        <Link id="link" to="/">
+          Sign in here
+        </Link>
         <Form.Input
           icon="user"
           iconPosition="left"
@@ -80,14 +84,10 @@ function Register() {
           error={errors && errors.confirmPassword ? true : false}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button id="button" type="submit">
+        <Button type="submit" primary>
           Register
         </Button>
       </Form>
-
-      <Link id="link" to="/">
-        Sign In Instead
-      </Link>
 
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">

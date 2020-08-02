@@ -12,12 +12,19 @@ function Home() {
     history.push("/settings");
   };
 
+  const newChat = () => {
+    console.log("new chat");
+  };
+
   return (
     <div>
-      <Button id="button" onClick={handleSettings}>
+      <Button primary onClick={newChat}>
+        New Chat
+      </Button>
+      <Button primary onClick={handleSettings}>
         Settings
       </Button>
-      <Button id="button" onClick={logout}>
+      <Button primary onClick={logout}>
         Logout
       </Button>
     </div>

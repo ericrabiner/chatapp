@@ -32,14 +32,12 @@
   margin-top: 10px;
 }
 
-#button {
-  background-color: var(--theme-red);
-  color: var(--theme-light);
+#success-message {
+  font-weight: 700;
 }
 
 #link {
-  color: var(--theme-black);
   font-weight: 700;
   display: inline-block;
-  margin-top: 10px;
+  margin-bottom: 10px;
 }

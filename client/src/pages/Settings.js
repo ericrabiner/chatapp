@@ -102,11 +102,11 @@ function Settings() {
           error={errors && errors.confirmNewPassword ? true : false}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
         />
-        <Button id="button" type="submit">
+        <Button primary type="submit">
           Save
         </Button>
         {success && (
-          <Segment inverted color="green">
+          <Segment id="success-message" inverted color="green">
             User successfully updated.
           </Segment>
         )}
