@@ -1,0 +1,5 @@
+node_modules
+nodemon.json
+.env
+deploy_commands.txt
+package-lock.json
