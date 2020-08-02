@@ -21,11 +21,7 @@ function Nav() {
         active={activeItem === "home"}
         onClick={() => handleMenu("home")}
       />
-      <Menu.Item
-        name="new chat"
-        active={activeItem === "newchat"}
-        onClick={() => handleMenu("newchat")}
-      />
+
       <Menu.Menu position="right">
         <Menu.Item
           name="settings"

@@ -106,7 +106,7 @@ function Settings() {
           error={errors && errors.confirmNewPassword ? true : false}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
         />
-        <Button onClick={() => history.push("/home")}>Cancel</Button>
+        <Button onClick={() => history.push("/home")}>Go Back</Button>
         <Button primary type="submit">
           Save
         </Button>

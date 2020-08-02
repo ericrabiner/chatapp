@@ -25,13 +25,6 @@
   border-radius: 20px;
 }
 
-.page-title {
-  display: block !important;
-  text-align: center;
-  font-size: 2rem;
-  margin-top: 10px;
-}
-
 #success-message {
   font-weight: 700;
 }
@@ -40,4 +33,9 @@
   font-weight: 700;
   display: inline-block;
   margin-bottom: 10px;
+}
+
+#welcome {
+  font-weight: 700;
+  color: var(--theme-light);
 }

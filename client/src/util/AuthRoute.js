@@ -17,7 +17,7 @@ function AuthRoute({ component: Component, ...props }) {
             <Component {...props} />
           </>
         ) : (
-          <Redirect to="/" />
+          <Redirect to="/login" />
         )
       }
     />

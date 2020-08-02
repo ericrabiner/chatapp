@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -17,10 +22,13 @@ function App() {
       <div id="root-container">
         <Router>
           <Switch>
-            <Route exact path="/" component={Login} />
+            <AuthRoute exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
             <AuthRoute exact path="/settings" component={Settings} />
-            <AuthRoute path="*" component={Home} />
+            <Route path="*">
+              <Redirect to="/" />
+            </Route>
           </Switch>
         </Router>
       </div>
