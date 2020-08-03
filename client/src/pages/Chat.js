@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Header, Form, Feed } from "semantic-ui-react";
+import { Header, Form, Feed, Dimmer, Loader } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
@@ -35,12 +35,17 @@ function Chat({ subscribeToNewMessages, ...params }) {
     setError("");
     createMessage();
   };
-  if (!params.data.getMessages) return <div>loading...</div>;
+  if (!params.data.getMessages)
+    return (
+      <Dimmer active>
+        <Loader size="massive">Loading</Loader>
+      </Dimmer>
+    );
 
   return (
     <div>
       <Header as="h1" id="welcome">
-        Hey {user.username} {user.id}
+        Hey {user.username}
       </Header>
       <div id="chat-box">
         <Feed>
