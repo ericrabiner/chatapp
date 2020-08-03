@@ -34,8 +34,7 @@ module.exports = gql`
     text: String!
   }
   type Query {
-    getUser(id: ID!): User!
-    getUsers: [User]
+    getMessages: [Message!]!
   }
   type Mutation {
     register(registerInput: RegisterInput): User!

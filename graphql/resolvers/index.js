@@ -3,14 +3,14 @@ const messagesResolvers = require("./messages");
 
 module.exports = {
   Query: {
-    ...usersResolvers.Query,
+    // ...usersResolvers.Query,
     ...messagesResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
     ...messagesResolvers.Mutation,
   },
-  // Subscriptions: {
-  //   ...messagesResolvers.Subscription,
-  // },
+  Subscription: {
+    ...messagesResolvers.Subscription,
+  },
 };

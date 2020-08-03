@@ -19,7 +19,8 @@
     "dotenv": "^8.2.0",
     "graphql": "^14.7.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.25"
+    "mongoose": "^5.9.25",
+    "subscriptions-transport-ws": "^0.9.17"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

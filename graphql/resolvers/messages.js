@@ -1,14 +1,27 @@
-// import { PubSub, withFilter } from "graphql-subscriptions";
-
-// const pubsub = new PubSub();
-
 const Message = require("../../models/Message");
-const User = require("../../models/User");
+const { user } = require("./merge");
+
+const NEW_MESSAGE = "NEW_MESSAGE";
 
 module.exports = {
-  //   Query: {},
+  Query: {
+    getMessages: async () => {
+      try {
+        const messages = await Message.find().sort({ createdAt: -1 });
+        return messages.map((message) => {
+          return {
+            id: message._id,
+            ...message._doc,
+            user: user.bind(this, message._doc.user),
+          };
+        });
+      } catch (err) {
+        throw err;
+      }
+    },
+  },
   Mutation: {
-    async createMessage(_, { messageInput: { id, text } }) {
+    createMessage: async (_, { messageInput: { id, text } }, context) => {
       try {
         if (!text) {
           throw new Error("Message cannot be empty.");
@@ -20,33 +33,27 @@ module.exports = {
         });
         const res = await newMessage.save();
 
-        const user = await User.findOne({ _id: id });
-
-        console.log(user);
-        console.log(user);
+        context.pubsub.publish(NEW_MESSAGE, {
+          newMessage: {
+            id: res._id,
+            ...res._doc,
+            user: user.bind(this, res._doc.user),
+          },
+        });
 
         return {
           id: res._id,
-          text: res._doc.text,
-          createdAt: res._doc.createdAt,
-          user: {
-            id: user._id,
-            email: user.email,
-            username: user.username,
-            createdAt: user.createdAt,
-          },
+          ...res._doc,
+          user: user.bind(this, res._doc.user),
         };
       } catch (err) {
         throw new Error(err);
       }
     },
   },
-  //   Subscription: {
-  //     newMessage: {
-  //       //   subscribe: withFilter(
-  //       //     () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE),
-  //       //     (payload, args) => payload.channelId === args.channelId
-  //       //   ),
-  //     },
-  //   },
+  Subscription: {
+    newMessage: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator([NEW_MESSAGE]),
+    },
+  },
 };

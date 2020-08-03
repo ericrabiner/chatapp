@@ -1,23 +1,24 @@
-import React, { useState, useContext } from "react";
-import { Header, Form, Message, Label, Feed } from "semantic-ui-react";
+import React, { useState, useEffect, useContext } from "react";
+import { Header, Form, Feed } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { errorTrim } from "../util/errorTrim";
 import ChatMessage from "../components/ChatMessage";
 
-function Chat() {
+function Chat({ ...params }) {
   const { user } = useContext(AuthContext);
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    params.subscribeToNewComments();
+  }, [params]);
 
   const [createMessage, { loading }] = useMutation(CREATE_MESSAGE, {
-    update(_, { data: { createMessage: message } }) {
-      const prevMessages = messages;
-      prevMessages.push(message);
-      setMessages(prevMessages);
+    onCompleted() {
+      setMessage("");
     },
     onError(err) {
       setError(errorTrim(err.graphQLErrors[0].message));
@@ -33,8 +34,7 @@ function Chat() {
     setError("");
     createMessage();
   };
-
-  console.log(messages);
+  if (!params.data.getMessages) return <div>loading...</div>;
 
   return (
     <div>
@@ -43,8 +43,8 @@ function Chat() {
       </Header>
       <div id="chat-box">
         <Feed>
-          {messages.length > 0 &&
-            messages.map((m) => {
+          {params.data.getMessages &&
+            params.data.getMessages.map((m) => {
               return <ChatMessage key={m.id} message={m} />;
             })}
         </Feed>

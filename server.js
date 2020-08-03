@@ -6,14 +6,14 @@ const mongoose = require("mongoose");
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
 
-// const pubsub = new PubSub();
+const pubsub = new PubSub();
 
 const PORT = process.env.port || 8080;
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // context: ({ req }) => ({ req, pubsub }),
+  context: ({ req }) => ({ req, pubsub }),
   engine: {
     reportSchema: true,
   },
@@ -32,7 +32,8 @@ mongoose
     return server.listen({ port: PORT });
   })
   .then((res) => {
-    console.log(`🚀 Server running on port: ${res.url}`);
+    console.log(`🚀 Server ready at ${res.url}`);
+    console.log(`🚀 Subscriptions ready at ${res.subscriptionsUrl}`);
   })
   .catch((err) => {
     console.error(err);

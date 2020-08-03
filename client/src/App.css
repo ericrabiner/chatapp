@@ -45,7 +45,7 @@
   background-color: var(--theme-light);
   width: 75vw;
   margin: auto;
-  height: 10vw;
+  height: 75vh;
   padding: 10px;
   overflow-y: scroll;
 }

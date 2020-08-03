@@ -13,8 +13,8 @@ import { AuthProvider } from "./context/auth";
 import AuthRoute from "./util/AuthRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
+import ChatWithData from "./pages/ChatWithData";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
       <div id="root-container">
         <Router>
           <Switch>
-            <AuthRoute exact path="/" component={Chat} />
+            <AuthRoute exact path="/" component={ChatWithData} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <AuthRoute exact path="/settings" component={Settings} />

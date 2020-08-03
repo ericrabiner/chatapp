@@ -9,7 +9,7 @@ const {
 } = require("../../util/validators");
 const User = require("../../models/User");
 
-function generateToken(user) {
+const generateToken = (user) => {
   return jwt.sign(
     {
       id: user.id,
@@ -19,29 +19,29 @@ function generateToken(user) {
     process.env.JWT_TOKEN_KEY,
     { expiresIn: "1h" }
   );
-}
+};
 
 module.exports = {
-  Query: {
-    async getUser({ id }) {
-      try {
-        const user = await User.findOne({ _id: id });
-        return user;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getUsers() {
-      try {
-        const users = await User.find().sort({ createdAt: -1 });
-        return users;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-  },
+  // Query: {
+  //   async getUser({ id }) {
+  //     try {
+  //       const user = await User.findOne({ _id: id });
+  //       return user;
+  //     } catch (err) {
+  //       throw new Error(err);
+  //     }
+  //   },
+  //   async getUsers() {
+  //     try {
+  //       const users = await User.find().sort({ createdAt: -1 });
+  //       return users;
+  //     } catch (err) {
+  //       throw new Error(err);
+  //     }
+  //   },
+  // },
   Mutation: {
-    async login(_, { email, password }) {
+    login: async (_, { email, password }) => {
       const { errors, valid } = validateLoginInput(email, password);
 
       if (!valid) {
@@ -71,10 +71,10 @@ module.exports = {
         token,
       };
     },
-    async register(
+    register: async (
       _,
       { registerInput: { username, email, password, confirmPassword } }
-    ) {
+    ) => {
       // Validate user data
       const { valid, errors } = validateRegisterInput(
         username,
@@ -115,7 +115,7 @@ module.exports = {
         token,
       };
     },
-    async updateUser(
+    updateUser: async (
       _,
       {
         updateUserInput: {
@@ -128,7 +128,7 @@ module.exports = {
           confirmNewPassword,
         },
       }
-    ) {
+    ) => {
       const { valid, errors } = validateUpdateUserInput(
         username,
         newEmail,
