@@ -43,18 +43,11 @@ module.exports.validateLoginInput = (email, password) => {
   };
 };
 
-module.exports.validateUpdateUserInput = (
-  username,
-  newEmail,
-  oldPassword,
-  newPassword,
-  confirmNewPassword
-) => {
+module.exports.validateUpdateProfileInput = (username, newEmail) => {
   const errors = {};
   if (username.trim() === "") {
     errors.username = "Username must not be empty";
   }
-
   if (newEmail.trim() === "") {
     errors.newEmail = "Email must not be empty";
   } else {
@@ -64,10 +57,21 @@ module.exports.validateUpdateUserInput = (
     }
   }
 
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+};
+
+module.exports.validateUpdatePasswordInput = (
+  oldPassword,
+  newPassword,
+  confirmNewPassword
+) => {
+  const errors = {};
   if (oldPassword === "") {
     errors.oldPassword = "Old password must not empty";
   }
-
   if (newPassword === "") {
     errors.newPassword = "New password must not empty";
   } else if (newPassword !== confirmNewPassword) {

@@ -5,8 +5,11 @@ const { UserInputError } = require("apollo-server");
 const {
   validateRegisterInput,
   validateLoginInput,
-  validateUpdateUserInput,
+  validateUpdateProfileInput,
+  validateUpdatePasswordInput,
 } = require("../../util/validators");
+const checkAuth = require("../../util/check-auth");
+
 const User = require("../../models/User");
 
 const generateToken = (user) => {
@@ -22,24 +25,6 @@ const generateToken = (user) => {
 };
 
 module.exports = {
-  // Query: {
-  //   async getUser({ id }) {
-  //     try {
-  //       const user = await User.findOne({ _id: id });
-  //       return user;
-  //     } catch (err) {
-  //       throw new Error(err);
-  //     }
-  //   },
-  //   async getUsers() {
-  //     try {
-  //       const users = await User.find().sort({ createdAt: -1 });
-  //       return users;
-  //     } catch (err) {
-  //       throw new Error(err);
-  //     }
-  //   },
-  // },
   Mutation: {
     login: async (_, { email, password }) => {
       const { errors, valid } = validateLoginInput(email, password);
@@ -115,40 +100,17 @@ module.exports = {
         token,
       };
     },
-    updateUser: async (
+    updateProfile: async (
       _,
-      {
-        updateUserInput: {
-          id,
-          username,
-          oldEmail,
-          newEmail,
-          oldPassword,
-          newPassword,
-          confirmNewPassword,
-        },
-      }
+      { updateProfileInput: { id, username, oldEmail, newEmail } },
+      context
     ) => {
-      const { valid, errors } = validateUpdateUserInput(
-        username,
-        newEmail,
-        oldPassword,
-        newPassword,
-        confirmNewPassword
-      );
-
+      checkAuth(context);
+      const { valid, errors } = validateUpdateProfileInput(username, newEmail);
       if (!valid) {
         throw new UserInputError("Errors", { errors });
       }
-
       const user = await User.findOne({ _id: id });
-
-      const match = await bcrypt.compare(oldPassword, user.password);
-      if (!match) {
-        errors.general = "Incorrect old password.";
-        throw new UserInputError("Incorrect old password.", { errors });
-      }
-
       if (newEmail !== oldEmail) {
         const existingEmail = await User.findOne({ email: newEmail });
         if (existingEmail) {
@@ -159,22 +121,54 @@ module.exports = {
           });
         }
       }
-
-      const password = await bcrypt.hash(newPassword, 12);
-
       await User.updateOne(
-        {
-          email: oldEmail,
-        },
-        { $set: { username, email: newEmail, password } }
+        { _id: id },
+        { $set: { username, email: newEmail } }
       );
-
       const token = generateToken(user);
-
       return {
         id,
         username,
         email: newEmail,
+        token,
+        createdAt: user.createdAt,
+      };
+    },
+    updatePassword: async (
+      _,
+      {
+        updatePasswordInput: {
+          id,
+          oldPassword,
+          newPassword,
+          confirmNewPassword,
+        },
+      },
+      context
+    ) => {
+      checkAuth(context);
+      const { valid, errors } = validateUpdatePasswordInput(
+        oldPassword,
+        newPassword,
+        confirmNewPassword
+      );
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+      const user = await User.findOne({ _id: id });
+      console.log(user);
+      const match = await bcrypt.compare(oldPassword, user.password);
+      if (!match) {
+        errors.general = "Incorrect old password.";
+        throw new UserInputError("Incorrect old password.", { errors });
+      }
+      const password = await bcrypt.hash(newPassword, 12);
+      await User.updateOne({ _id: id }, { $set: { password } });
+      const token = generateToken(user);
+      return {
+        id,
+        username: user.username,
+        email: user.email,
         token,
         createdAt: user.createdAt,
       };

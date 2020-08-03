@@ -11,8 +11,6 @@ function Nav() {
     history?.location?.pathname ? history?.location?.pathname.substr(1) : "chat"
   );
 
-  console.log(history);
-
   const handleMenu = (option) => {
     setActiveItem(option);
     history.push(`/${option}`);

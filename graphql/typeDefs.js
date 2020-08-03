@@ -20,11 +20,14 @@ module.exports = gql`
     user: User!
     createdAt: String!
   }
-  input UpdateUserInput {
+  input UpdateProfileInput {
     id: ID!
     username: String!
     oldEmail: String!
     newEmail: String!
+  }
+  input UpdatePasswordInput {
+    id: ID!
     oldPassword: String!
     newPassword: String!
     confirmNewPassword: String!
@@ -39,7 +42,8 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
-    updateUser(updateUserInput: UpdateUserInput!): User!
+    updateProfile(updateProfileInput: UpdateProfileInput!): User!
+    updatePassword(updatePasswordInput: UpdatePasswordInput!): User!
     createMessage(messageInput: MessageInput!): Message
   }
   type Subscription {
