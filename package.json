@@ -4,10 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "both": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "Eric Rabiner",
@@ -16,6 +15,7 @@
     "apollo-server": "^2.16.0",
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "graphql": "^14.7.0",
     "jsonwebtoken": "^8.5.1",
