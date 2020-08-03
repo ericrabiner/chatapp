@@ -10,7 +10,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 
 const httpLink = createHttpLink({
-  uri: `http://54.81.127.43:8080`,
+  uri: `http://${process.env.REACT_APP_URI}:8080`,
 });
 
 const authLink = setContext(() => {
@@ -23,7 +23,7 @@ const authLink = setContext(() => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://54.81.127.43:8080/graphql`,
+  uri: `ws://${process.env.REACT_APP_URI}:8080/graphql`,
   options: {
     reconnect: true,
   },
