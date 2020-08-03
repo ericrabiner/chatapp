@@ -7,7 +7,11 @@ import { AuthContext } from "../context/auth";
 function Nav() {
   const history = useHistory();
   const { logout } = useContext(AuthContext);
-  const [activeItem, setActiveItem] = useState("chat");
+  const [activeItem, setActiveItem] = useState(
+    history?.location?.pathname ? history?.location?.pathname.substr(1) : "chat"
+  );
+
+  console.log(history);
 
   const handleMenu = (option) => {
     setActiveItem(option);
