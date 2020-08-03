@@ -3,3 +3,4 @@ nodemon.json
 .env
 deploy_commands.txt
 package-lock.json
+buro.pem

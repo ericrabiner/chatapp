@@ -10,7 +10,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 
 const httpLink = createHttpLink({
-  uri: `http://localhost:8080`,
+  uri: `http://18.206.192.199:8080`,
 });
 
 const authLink = setContext(() => {

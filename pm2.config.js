@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "buro-backend",
+      name: "chatapp-backend",
       script: "./server.js",
       instances: "max",
       log_date_format: "YYYY-MM-DD HH:mm Z",
