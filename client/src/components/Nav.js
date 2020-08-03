@@ -7,7 +7,7 @@ import { AuthContext } from "../context/auth";
 function Nav() {
   const history = useHistory();
   const { logout } = useContext(AuthContext);
-  const [activeItem, setActiveItem] = useState("home");
+  const [activeItem, setActiveItem] = useState("chat");
 
   const handleMenu = (option) => {
     setActiveItem(option);
@@ -17,9 +17,9 @@ function Nav() {
   return (
     <Menu pointing secondary inverted>
       <Menu.Item
-        name="home"
-        active={activeItem === "home"}
-        onClick={() => handleMenu("home")}
+        name="chat"
+        active={activeItem === "chat"}
+        onClick={() => handleMenu("chat")}
       />
 
       <Menu.Menu position="right">

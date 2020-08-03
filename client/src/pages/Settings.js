@@ -23,6 +23,7 @@ function Settings() {
       login(userData);
     },
     onError(err) {
+      // console.log(err);
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
     onCompleted: () => {
@@ -33,6 +34,7 @@ function Settings() {
       }, 2000);
     },
     variables: {
+      id: user.id,
       username,
       newEmail,
       oldEmail: user.email,
@@ -133,6 +135,7 @@ function Settings() {
 
 const UPDATE_USER = gql`
   mutation updateUser(
+    $id: ID!
     $username: String!
     $oldEmail: String!
     $newEmail: String!
@@ -142,6 +145,7 @@ const UPDATE_USER = gql`
   ) {
     updateUser(
       updateUserInput: {
+        id: $id
         username: $username
         oldEmail: $oldEmail
         newEmail: $newEmail

@@ -38,4 +38,19 @@
 #welcome {
   font-weight: 700;
   color: var(--theme-light);
+  text-align: center;
+}
+
+#chat-box {
+  background-color: var(--theme-light);
+  width: 75vw;
+  margin: auto;
+  height: 10vw;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+#message-input {
+  margin: auto;
+  width: 75vw;
 }

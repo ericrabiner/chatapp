@@ -23,6 +23,14 @@ function generateToken(user) {
 
 module.exports = {
   Query: {
+    async getUser({ id }) {
+      try {
+        const user = await User.findOne({ _id: id });
+        return user;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getUsers() {
       try {
         const users = await User.find().sort({ createdAt: -1 });
@@ -56,8 +64,10 @@ module.exports = {
       const token = generateToken(user);
 
       return {
-        ...user._doc,
         id: user._id,
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt,
         token,
       };
     },
@@ -97,10 +107,11 @@ module.exports = {
       const res = await newUser.save();
 
       const token = generateToken(res);
-
       return {
-        ...res._doc,
         id: res._id,
+        username: res._doc.username,
+        email: res._doc.email,
+        createdAt: res._doc.createdAt,
         token,
       };
     },
@@ -108,6 +119,7 @@ module.exports = {
       _,
       {
         updateUserInput: {
+          id,
           username,
           oldEmail,
           newEmail,
@@ -129,7 +141,7 @@ module.exports = {
         throw new UserInputError("Errors", { errors });
       }
 
-      const user = await User.findOne({ email: oldEmail });
+      const user = await User.findOne({ _id: id });
 
       const match = await bcrypt.compare(oldPassword, user.password);
       if (!match) {
@@ -160,7 +172,7 @@ module.exports = {
       const token = generateToken(user);
 
       return {
-        id: user._id,
+        id,
         username,
         email: newEmail,
         token,

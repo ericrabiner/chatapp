@@ -13,7 +13,7 @@ import { AuthProvider } from "./context/auth";
 import AuthRoute from "./util/AuthRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/Home";
+import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
       <div id="root-container">
         <Router>
           <Switch>
-            <AuthRoute exact path="/" component={Home} />
+            <AuthRoute exact path="/" component={Chat} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <AuthRoute exact path="/settings" component={Settings} />
