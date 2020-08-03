@@ -9,7 +9,7 @@ function ChatWithData() {
   return (
     <Chat
       {...result}
-      subscribeToNewComments={() =>
+      subscribeToNewMessages={() =>
         subscribeToMore({
           document: NEW_MESSAGE,
           updateQuery: (prev, { subscriptionData }) => {

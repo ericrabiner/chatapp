@@ -6,15 +6,16 @@ import { useMutation } from "@apollo/react-hooks";
 import { errorTrim } from "../util/errorTrim";
 import ChatMessage from "../components/ChatMessage";
 
-function Chat({ ...params }) {
+function Chat({ subscribeToNewMessages, ...params }) {
   const { user } = useContext(AuthContext);
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    params.subscribeToNewComments();
-  }, [params]);
+    const unsubscribeToNewMessages = subscribeToNewMessages();
+    return () => unsubscribeToNewMessages();
+  }, [subscribeToNewMessages]);
 
   const [createMessage, { loading }] = useMutation(CREATE_MESSAGE, {
     onCompleted() {
