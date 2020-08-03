@@ -1,8 +1,8 @@
 # chatapp
 
 ## Stack
-
-- React
+- React (hooks are ❤️)
 - ApolloServer
 - MongoDB
 - GraphQL
+- Node.js
