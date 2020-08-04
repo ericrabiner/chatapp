@@ -10,6 +10,7 @@
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "apollo-link-ws": "^1.0.20",
+    "apollo-upload-client": "^14.1.1",
     "env-cmd": "^10.1.0",
     "graphql": "^14.7.0",
     "graphql-tag": "^2.10.4",

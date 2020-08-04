@@ -3,7 +3,6 @@ const messagesResolvers = require("./messages");
 
 module.exports = {
   Query: {
-    // ...usersResolvers.Query,
     ...messagesResolvers.Query,
   },
   Mutation: {

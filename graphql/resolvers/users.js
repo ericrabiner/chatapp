@@ -1,6 +1,8 @@
+const mime = require("mime-types");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
+const multer = require("multer");
 
 const {
   validateRegisterInput,
@@ -100,6 +102,7 @@ module.exports = {
         token,
       };
     },
+    // TODO - update local storage not working-ish (refresh gives old data, state is new data tho)
     updateProfile: async (
       _,
       { updateProfileInput: { id, username, oldEmail, newEmail } },
@@ -172,6 +175,44 @@ module.exports = {
         token,
         createdAt: user.createdAt,
       };
+    },
+    singleUpload: async (_, { file }, context) => {
+      const user = checkAuth(context);
+      console.log(user);
+      const upload = await file;
+      const { createReadStream, mimetype } = upload;
+      const fileStream = createReadStream();
+      const extension = mime.extension(mimetype);
+
+      if (!["jpeg", "png"].includes(extension)) {
+        throw Error("Invalid file type. Please use jpeg or png.");
+      }
+
+      // TODO - upload file to mongo - mutler?? fuck aws s3
+      var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, "/tmp/my-uploads");
+        },
+        filename: function (req, file, cb) {
+          cb(null, file.fieldname + "-" + Date.now());
+        },
+      });
+
+      var upload = multer({ storage: storage });
+
+      await User.updateOne(
+        { _id: user.id },
+        {
+          $set: {
+            image: {
+              data: fileStream,
+              contentType: mimetype,
+            },
+          },
+        }
+      );
+
+      return upload;
     },
   },
 };

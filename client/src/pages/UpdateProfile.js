@@ -3,6 +3,7 @@ import { Button, Form, Message } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { AuthContext } from "../context/auth";
+import { errorTrim } from "../util/errorTrim";
 
 function UpdateProfile() {
   const { user, update } = useContext(AuthContext);
@@ -11,6 +12,9 @@ function UpdateProfile() {
   const [username, setUsername] = useState(user.username);
   const [newEmail, setNewEmail] = useState(user.email);
   const [userImage, setUserImage] = useState(null);
+  const [userFile, setUserFile] = useState(null);
+
+  const [singleUpload] = useMutation(SINGLE_UPLOAD);
 
   const [updateProfile, { loading }] = useMutation(UPDATE_PROFILE, {
     update(_, { data: { updateProfile: userData } }) {
@@ -31,13 +35,16 @@ function UpdateProfile() {
       username,
       newEmail,
       oldEmail: user.email,
+      file: userFile,
     },
   });
 
   const onSubmit = (event) => {
+    console.log(userFile);
     event.preventDefault();
     updateProfile();
   };
+
   return (
     <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
       <h1>Update Profile</h1>
@@ -82,21 +89,17 @@ function UpdateProfile() {
           if (file) {
             // 1.6e7 bytes = 16 mb
             if (file.size < 1.6e7) {
-              setUserImage(URL.createObjectURL(file));
               try {
+                const upload = await singleUpload({ variables: { file } });
+                setUserFile(upload.data.singleUpload.filename);
+                setUserImage(URL.createObjectURL(file));
+                // setUserImage(URL.createObjectURL(upload.data.singleUpload));
               } catch (err) {
-                console.log(err);
+                setErrors({
+                  InvalidFile: errorTrim(err.graphQLErrors[0].message),
+                  ...errors,
+                });
               }
-
-              // try {
-              //   const upload = await logoUpload({ variables: { file } });
-              //   setUserImage(file.filename);
-              //   setLogoImage(imageBase(upload.data.logoUpload.filename));
-              //   setLoading(false);
-              // } catch (err) {
-              //   setErrorUpload(graphQLErrorTrim(err.message));
-              //   setLoading(false);
-              // }
             } else {
               setErrors({
                 imageError:
@@ -175,6 +178,16 @@ const UPDATE_PROFILE = gql`
       username
       createdAt
       token
+    }
+  }
+`;
+
+const SINGLE_UPLOAD = gql`
+  mutation singleUpload($file: Upload!) {
+    singleUpload(file: $file) {
+      filename
+      mimetype
+      encoding
     }
   }
 `;

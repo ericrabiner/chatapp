@@ -27,8 +27,6 @@ function Settings() {
   const width = useWindowWidth();
   const [activeItem, setActiveItem] = useState("userprofile");
 
-  console.log(width);
-
   return (
     <div id="light-container">
       {width > 1200 && (

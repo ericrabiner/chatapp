@@ -36,6 +36,11 @@ module.exports = gql`
     id: ID!
     text: String!
   }
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
   type Query {
     getMessages: [Message!]!
   }
@@ -44,7 +49,8 @@ module.exports = gql`
     login(email: String!, password: String!): User!
     updateProfile(updateProfileInput: UpdateProfileInput!): User!
     updatePassword(updatePasswordInput: UpdatePasswordInput!): User!
-    createMessage(messageInput: MessageInput!): Message
+    createMessage(messageInput: MessageInput!): Message!
+    singleUpload(file: Upload!): File
   }
   type Subscription {
     newMessage: Message!
