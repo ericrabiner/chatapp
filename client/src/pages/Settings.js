@@ -1,18 +1,7 @@
-import React, { useContext, useState } from "react";
-import {
-  Button,
-  Form,
-  Message,
-  Image,
-  Label,
-  Grid,
-  Menu,
-  Segment,
-} from "semantic-ui-react";
-import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import React, { useState } from "react";
+import { useWindowWidth } from "@react-hook/window-size";
+import { Grid, Menu, Segment } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
-import { AuthContext } from "../context/auth";
 import UpdateProfile from "./UpdateProfile";
 import UpdatePassword from "./UpdatePassword";
 
@@ -35,13 +24,49 @@ function MenuSwitch({ item }) {
 
 function Settings() {
   const history = useHistory();
+  const width = useWindowWidth();
   const [activeItem, setActiveItem] = useState("userprofile");
+
+  console.log(width);
 
   return (
     <div id="light-container">
-      <Grid id="settings-menu">
-        <Grid.Column width={4}>
-          <Menu fluid vertical tabular id="settings-menu">
+      {width > 1200 && (
+        <Grid id="settings-menu">
+          <Grid.Column width={4}>
+            <Menu fluid vertical tabular id="settings-menu">
+              <Menu.Item
+                name="User Profile"
+                active={activeItem === "userprofile"}
+                onClick={() => setActiveItem("userprofile")}
+              />
+              <Menu.Item
+                name="Password"
+                active={activeItem === "password"}
+                onClick={() => setActiveItem("password")}
+              />
+              <Menu.Item
+                name="Go Back"
+                active={activeItem === "goback"}
+                onClick={() => history.push("/home")}
+              />
+            </Menu>
+          </Grid.Column>
+
+          <Grid.Column stretched width={12}>
+            <Segment>
+              <MenuSwitch item={activeItem} />
+            </Segment>
+          </Grid.Column>
+        </Grid>
+      )}
+
+      {width <= 1200 && (
+        <>
+          <Segment>
+            <MenuSwitch item={activeItem} />
+          </Segment>
+          <Menu attached="bottom" tabular>
             <Menu.Item
               name="User Profile"
               active={activeItem === "userprofile"}
@@ -58,14 +83,8 @@ function Settings() {
               onClick={() => history.push("/home")}
             />
           </Menu>
-        </Grid.Column>
-
-        <Grid.Column stretched width={12}>
-          <Segment>
-            <MenuSwitch item={activeItem} />
-          </Segment>
-        </Grid.Column>
-      </Grid>
+        </>
+      )}
     </div>
   );
 }

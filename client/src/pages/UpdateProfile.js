@@ -43,7 +43,11 @@ function UpdateProfile() {
       <h1>Update Profile</h1>
       {userImage ? (
         <div className="contact-image-uploaded-wrapper">
-          <img src={userImage} className="contact-image-uploaded" />
+          <img
+            className="contact-image-uploaded"
+            src={userImage}
+            alt="Profile"
+          />
         </div>
       ) : (
         <div className="contact-circle">

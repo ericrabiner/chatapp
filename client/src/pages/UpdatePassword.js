@@ -17,8 +17,7 @@ function UpdatePassword() {
       login(userData);
     },
     onError(err) {
-      console.log(err);
-      //   setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
     onCompleted: () => {
       setErrors({});
@@ -36,12 +35,6 @@ function UpdatePassword() {
   });
 
   const onSubmit = (event) => {
-    console.log({
-      id: user.id,
-      oldPassword,
-      newPassword,
-      confirmNewPassword,
-    });
     event.preventDefault();
     updatePassword();
   };
